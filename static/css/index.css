@@ -1,0 +1,71 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    /* 行高是字体的1.15倍 */
+    line-height: 1.15;
+    background-color: #161523;
+}
+
+header {
+    position: relative;
+    height: 1.25rem;
+    background:#00CED1;
+    background-size: 100% 100%;
+}
+
+header h1 {
+    font-size: 0.475rem;
+    color: #fff;
+    text-align: center;
+    line-height: 1rem;
+}
+
+.mainbox {
+    min-width: 1024px;
+    max-width: 1920px;
+    padding: 0.125rem 0.125rem 0;
+    display: flex;
+    margin:auto;
+}
+
+.mainbox .column {
+    flex: 3;
+    /* 整个屏幕平均分为3列 */
+}
+
+
+/* 设置中间列占5份 */
+
+.mainbox .column:nth-child(2) {
+    flex: 5;
+    margin: 0 0.125rem 0.1875rem;
+    overflow: hidden;
+}
+
+.panel {
+    position: relative;
+    height: 3.875rem;
+    /*310px */
+    border: 1px solid rgba(25, 186, 139, 0.17);
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 0 0.1875rem 0.5rem;
+    margin-bottom: 0.1875rem;
+}
+.a4,
+.a5{
+    position: relative;
+    height: 5.91rem;
+    border: 1px solid rgba(25, 186, 139, 0.17);
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 10px;
+    padding: 0 0.1875rem 0.5rem;
+    margin-bottom: 0.1875rem;
+}

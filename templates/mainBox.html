@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../static/img/echarts.js"></script>
+    <script src="../static/img/china.js" charset="utf-8"></script>
+    <script src="../static/img/world.js"></script>
+    <link rel="stylesheet" href="../static/css/index.css">
+    <script src="../static/img/flexible.js"></script>
+</head>
+<body>
+<header>
+    <h1>国内疫情数据综合可视化平台</h1>
+</header>
+<div class="mainbox">
+<!--    左边-->
+<div class="column">
+<!--仪表盘-->
+<div class="panel">
+     <div id="gauge" style="width:500px;height:300px;margin:40px auto;"></div>
+    <script type="text/javascript">
+		var gauge=echarts.init(document.getElementById('gauge'));
+		var option = {
+				"title": [{
+            		"text": "国内新冠疫情死亡率",
+            		"left": "center",
+            		"top": "auto",
+            		"textStyle": {
+                		"fontSize": 18,
+                		color: "#fff",
+            		},
+            		"subtextStyle": {
+                		"fontSize": 12,
+                		color: "#fff",
+            		}
+       			 }],
+  			series: [{
+    			type: "gauge",
+    			color: "#fff",
+    			detail: {
+      				formatter: "{value}%",
+      				color: "#fff",
+    			},
+    			data: [{
+      				value: {{gauge_data}},
+      				name: "死亡率",
+      				detail: {
+      				    color:"#fff",
+        				fontSize: 25
+
+      				}
+    			}],
+    			max: 10,
+    			progress: {
+      				itemStyle: {
+      				color: "#fff",}
+    			},
+    			splitLine: {
+      				show: false,
+      				distance: 15
+    			}
+  			}]
+
+		};
+		gauge.setOption(option);
+		</script>
+</div>
+<!--折线图-->
+<div class="panel">
+    <div id="line" style="width: 500px; height: 300px;margin:30px 5px;"></div>
+		<script type="text/javascript">
+			var Line=echarts.init(document.getElementById('line'));
+			var option={
+				"title": [{
+            		"text": "全国每日新增的确诊人数（二月份）",
+            		"left": "center",
+            		"top": "auto",
+            		"textStyle": {
+                		"fontSize": 18,
+                		color: "#fff",
+            		},
+            		"subtextStyle": {
+                		"fontSize": 12,
+                		color: "#fff",
+            		}
+       			 }],
+				xAxis: {
+				        data: {{data_y}},
+				        axisLine: {
+                    lineStyle: {
+                // 设置x轴颜色
+                        color: '#fff'
+                        }
+                       },
+				    },
+				    yAxis: {
+				    show: true,
+                    type: 'value',
+                    axisLine: {
+                    lineStyle: {
+                    // 设置y轴颜色
+                        color: '#fff'
+                            }
+                        },
+	},
+		series: [{
+		   name:"确诊人数",
+		   data: {{data_x}},
+		   type: 'line',
+		   itemStyle: {
+		   color: "#fff",
+		   normal: {
+		  color: 'red',
+		 lineStyle: {
+		 color: 'red'
+				}
+			}
+		},
+  }],
+        tooltip : {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                },
+            formatter: function (params) {
+            var color = params.color;
+
+            var htmlStr ='<div>';
+            htmlStr += params.name+'日'+'<br/>';
+
+            htmlStr += '<span style="margin-right:5px;display:inline-block;width:10px;height:10px;border-radius:50px;background-color:'+color+';"></span>';
+
+            //htmlStr += '<span style="color:'+color+'">';
+
+            htmlStr += params.seriesName + '：'+params.value + 人;
+
+            //htmlStr += '</span>';
+
+            htmlStr += '</div>';
+
+            return htmlStr;
+        },
+            }
+        }
+    };
+			Line.setOption(option);
+		</script>
+</div>
+<!--散点图-->
+<div class="panel">
+    <div id="scatter" style="width: 500px; height: 300px;margin:30px auto"></div>
+    <script type="text/javascript">
+			var Scatter=echarts.init(document.getElementById('scatter'));
+			var option={
+        title: {
+            text: "各省市从湖北迁入的人口比例与该省累计确诊人数的关系",
+            left: "center",
+            textStyle: {
+                fontSize: 18,
+                color: "#fff",
+            }
+        },
+        tooltip: {
+        trigger: 'item',
+        formatter: function (params) {
+            var color = params.color;
+
+            var htmlStr ='<div>';
+            htmlStr += params.name;
+
+
+
+            htmlStr += '<span style="margin-right:5px;display:inline-block;width:10px;height:10px;border-radius:5px;background-color:'+color+';"></span>';
+
+
+            //htmlStr += '<span style="color:'+color+'">';
+
+
+            htmlStr += '占比'+params.seriesName + '：'+params.value + '人'+ '<br/>';
+
+
+            //htmlStr += '</span>';
+
+            htmlStr += '</div>';
+
+            return htmlStr;
+        }
+    },
+
+
+        yAxis: {
+            show: true,
+             axisLine: {
+                    lineStyle: {
+                // 设置x轴颜色
+                        color: '#fff'
+                        }
+                       },
+        },
+        xAxis: {
+            type: "value",
+             axisLine: {
+             lineStyle: {
+                // 设置y轴颜色
+                 color: '#fff'
+                        }
+                       },
+        },
+        series: [
+            {
+                type: "scatter",
+
+                name: "",
+                data: {{scatter_data | safe}}
+                       },
+
+        ]
+    };
+
+			Scatter.setOption(option);
+		</script>
+</div>
+</div>
+<!--中间-->
+<div class="column">
+<!--迁徙图-->
+<div class="a4">
+<div id="map1" style="width:700px;height:500px;margin:30px auto;"></div>
+<script type="text/javascript">
+  var myChart = echarts.init(document.getElementById("map1"));
+
+  var option = {
+    title: [{
+      text: "人口迁徙图",
+      left: "center",
+      top: "auto",
+      textStyle: {
+        fontSize: 18,
+        color: "#fff",
+      },
+      subtextStyle: {
+        fontSize: 18
+      }
+    }],
+    tooltip: {
+        trigger: 'item',
+        formatter: '{b}<br/>{c} (迁徙人数占比)'
+    },
+    series: [{
+       "type": "lines",
+        "zlevel": 1,
+        "effect": {
+          "show": true,
+          "period": 6,
+          "trailLength": 0,
+          "color": "#fff",
+          "symbol": "arrow",
+          "symbolSize": 6
+        },
+        "symbol": [
+          "none",
+          "arrow"
+        ],
+        "symbolSize": 6,
+        "data": {{data_geoLine_lines | safe}},
+        "lineStyle": {
+          "normal": {
+            "width": 1,
+            "opacity": 1,
+            "curveness": 0.3,
+            "type": "solid",
+            "color": "red"
+          }
+        }
+      },
+      {
+        "type": "scatter",
+<!--        "zlevel": 2,-->
+        "coordinateSystem": "geo",
+        "symbolSize": 5,
+        color: "red",
+        name:"人数:",
+        "data": {{data_geoLine_scatter|safe}},
+        "label": {
+          "normal": {
+            "show": true,
+            "position": "top",
+            "textStyle": {
+              "fontSize": 12
+            }
+
+          },
+          "emphasis": {
+            "show": true,
+            "textStyle": {
+              "fontSize": 12
+            }
+          }
+        },
+<!--        "tooltip": {-->
+<!--          "formatter": "{b}"-->
+<!--        }-->
+      }
+    ],
+    "geo": {
+      "map": "china",
+<!--      控制地图不缩放-->
+      "roam": false,
+      "label": {
+        "emphasis": {
+          "show": true,
+          "textStyle": {
+            "color": "#000"
+          }
+        }
+      },
+      "itemStyle": {
+        "normal": {
+          "areaColor": "#46A3FF",
+          "borderColor": "#111"
+        },
+        "emphasis": {
+          "areaColor": "#fff"
+        }
+      }
+    },
+  };
+  myChart.setOption(option);
+</script>
+</div>
+<!--地图-->
+<div class="a5">
+<div id="map2" style="width:670px;height:490px;margin:0px auto;"></div>
+<script type="text/javascript">
+  var myChart = echarts.init(document.getElementById("map2"));
+  var option = {
+  title: {
+            text: "各个省市累计确诊人数",
+            left: "center",
+            textStyle: {
+                fontSize: 18,
+                color:"#fff"
+            }
+        },
+  tooltip: {
+        trigger: 'item',
+        formatter: '{b}<br/>{c} (确诊人数)'
+    },
+
+    "series": [{
+    name:"确诊人数",
+      "type": "map",
+      "symbol": "circle",
+      "label": {
+        "normal": {
+          "show": false,
+          "position": "top",
+          "textStyle": {
+            "fontSize": 18,
+            color: "#fff",
+          }
+        },
+        "emphasis": {
+          "show": true,
+          "textStyle": {
+            "fontSize": 12
+          }
+        }
+      },
+      "mapType": "china",
+      name:"确诊人数：",
+      "data": {{data_map|safe}},
+      "roam": false,
+    }],
+    "visualMap": {
+      "type": "piecewise",
+      "min": 0,
+      "max": 100,
+      "text": [
+        "",
+        ""
+      ],
+      "textStyle": {color:"#fff"},
+      "inRange": {
+        "color": [
+          "pink",
+          "red",
+          "#560707"
+        ]
+      },
+<!--      "calculable": true,-->
+      "splitNumber": 5,
+      "orient": "horizontal",
+      "left": "center",
+      "top": "bottom",
+      "showLabel": true,
+      "pieces": [{
+          "max": 100,
+          "min": 0,
+          "label": "<100"
+        },
+        {
+          "max": 500,
+          "min": 101,
+          "label": "100-500"
+        },
+        {
+          "max": 800,
+          "min": 501,
+          "label": "500-800"
+        },
+        {
+          "max": 1000,
+          "min": 801,
+          "label": "800-1000"
+        },
+        {
+          "max": 1500,
+          "min": 1001,
+          "label": "1000-1500"
+        },
+        {
+          "max": 100000,
+          "min": 1501,
+          "label": ">1500"
+        }
+      ]
+    }
+  };
+  myChart.setOption(option);
+</script>
+</div>
+</div>
+<!--    右边-->
+<div class="column">
+<!--饼图-->
+    <div class="panel">
+<div id="pie" style="width:500px;height:300px"></div>
+<script type="text/javascript">
+ var myChart = echarts.init(document.getElementById("pie"));
+  option = {
+    title: {
+      text: '各媒体发布的新闻占比情况',
+      left: 'center',
+      textStyle: {
+        color: '#fff',
+        fontSize: 18,
+      }
+    },
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      top: '5%',
+      right: '2%',
+      orient: 'vertical',
+      textStyle: {
+        color: '#fff',
+      }
+    },
+
+    series: [{
+      name: '访问来源',
+      type: 'pie',
+      radius: ['45%', '90%'],
+      center: ['50%', '55%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: true,
+        position: 'inside',
+        formatter: '{d}%',
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: '40',
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: {{pie_data|safe}}
+    }]
+  };
+
+  myChart.setOption(option);
+  </script>
+        </div>
+<!--主题河流-->
+    <div class="panel">
+<div id="themeRiver" style="width:500px;height:300px;margin:20px auto;"></div>
+<script type="text/javascript">
+  var myChart = echarts.init(document.getElementById("themeRiver"));
+
+
+  option = {
+
+    title: {
+      text: '各媒体每一天的新闻数量',
+      left: 'center',
+      textStyle: {
+        color: '#fff',
+        fontSize: 18,
+      }
+    },
+
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'line',
+        lineStyle: {
+          color: 'rgba(0,0,0,0.2)',
+          width: 1,
+          type: 'solid'
+        }
+      }
+    },
+
+
+
+    legend: {
+      data: ['国家卫健委', '央视网', '人民日报', '新华社'],
+      top: '8%',
+      right: 'center',
+      textStyle: {
+        color: '#fff',
+      }
+    },
+
+    singleAxis: {
+      top: 50,
+      bottom: 50,
+      axisTick: {},
+      axisLabel: {},
+      type: 'time',
+      axisPointer: {
+        animation: true,
+        label: {
+          show: true
+        }
+      },
+      axisLine: {
+        lineStyle: {
+          color: "#fff"
+        }
+      },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          type: 'dashed',
+          opacity: 0.2
+        }
+      }
+    },
+
+    series: [{
+      type: 'themeRiver',
+
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 20,
+          shadowColor: 'rgba(0, 0, 0, 0.8)'
+        }
+      },
+      data: {{river_data|safe}},
+    }]
+  };
+
+  myChart.setOption(option);
+</script>
+        </div>
+<!--词云图-->
+    <div class="panel">
+    <div id="china" style="width:500px;height:300px;margin:20px auto;"></div>
+    <script>
+        var myChart1 = echarts.init(document.getElementById('china'));
+        key = {{key|safe}};
+        value = {{value|safe}};
+        var data = [];
+        for (var i=0;i<value.length;i++){
+            data.push(
+           { value:value[i],
+            name:key[i]})}
+
+        var option1 ={
+            //设置标题，居中显示
+            title:{
+                text: '所有新闻的关键字',
+                left:'center',
+                 textStyle: {
+        color: '#fff',
+        fontSize: 18,
+      }
+             },
+            //数据可以点击
+            tooltip:{
+            show:true
+
+            },
+
+            series:[
+                {
+                    //词的类型
+                    type: 'wordCloud',
+                    //设置字符大小范围
+                    gridSize:4,
+                    sizeRange:[10,70],
+<!--                    shape:'star',-->
+                    rotationRange:[-45,90],
+                    textStyle: {
+                        normal:{
+                            //生成随机的字体颜色
+                            color:function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',')+')';
+                            }
+                        }
+                    },
+                    //不要忘记调用数据
+                       data:data
+                 }
+            ]
+        };
+        myChart1.setOption(option1);
+    </script>
+</div>
+</div>
+</div>
+</body>
+</html>
