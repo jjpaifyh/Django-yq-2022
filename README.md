@@ -1,2 +1,2 @@
-# Django-yq-2022
-# Django-yq-2022
+# Django-可视化系统
+
